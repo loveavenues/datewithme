@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Date with Me? :></title>
+  <style>
+    @import url(https://fonts.googleapis.com/css?family=Bad+Script);
+
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      background: linear-gradient(to bottom, #fdfcf7, #f5efe4, #f0e4d7); /* beige theme */
+      font-family: 'Bad Script', cursive;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    #wrapper {
+      width: 100%;
+      height: 2000px;
+    }
+
+    #perspectiva {
+      position: fixed;
+      top: 200px;
+      left: 50%;
+      margin-left: -200px;
+      perspective: 1000;
+      z-index: 10;
+    }
+
+    #contenedor {
+      box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+      width: 400px;
+      height: 280px;
+      transform-style: preserve-3d;
+      border-radius: 10px;
+    }
+
+    .cara {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 10px;
+    }
+
+    .frontal {
+      background: linear-gradient(to bottom, #faf7f2, #f3ede4);
+      z-index: 20;
+      border: 2px solid #e0d6c8;
+    }
+
+    .frontal h1 {
+      color: #5c4b3c;
+      text-shadow: 0px 1px 1px #fff;
+      font-size: 1.2em;
+      text-align: center;
+      margin-top: 110px;
+    }
+
+    .frontal h1 span {
+      color: #9c8f7a;
+      font-size: .9em;
+    }
+
+    .trasera {
+      background: linear-gradient(to bottom, #f7f3ec, #e8e0d4);
+      transform: rotateY(-180deg);
+      border: 2px solid #e0d6c8;
+    }
+
+    #abrir {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 0;
+      width: 80px;
+      border-top: 175px solid #e8e2d8;
+      border-left: 160px solid transparent;
+      border-right: 160px solid transparent;
+      transform-origin: center top;
+      z-index: 10;
+    }
+
+    #partes {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 0;
+      height: 0;
+      border-left: 200px solid #ede6db;
+      border-top: 140px solid transparent;
+      border-bottom: 140px solid transparent;
+      z-index: 5;
+    }
+
+    #partes:after {
+      content: "";
+      position: absolute;
+      bottom: -140px;
+      left: -200px;
+      height: 0;
+      width: 80px;
+      border-bottom: 175px solid #f6f2ec;
+      border-left: 160px solid transparent;
+      border-right: 160px solid transparent;
+    }
+
+    #partes:before {
+      content: "";
+      position: absolute;
+      top: -140px;
+      right: -200px;
+      width: 0;
+      height: 0;
+      border-right: 200px solid #ede6db;
+      border-top: 140px solid transparent;
+      border-bottom: 140px solid transparent;
+    }
+
+    #carta {
+      background: linear-gradient(to bottom, #fffdf9, #f7f2ea);
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+      border-radius: 5px;
+      position: absolute;
+      top: 3px;
+      left: 0;
+      margin: 0 0 0 5px;
+      width: 390px;
+      height: 200px;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .carta-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 15px;
+    }
+
+    #carta hgroup {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    #carta hgroup h1 {
+      font-size: 1.6em;
+      color: #9c8f7a;
+    }
+
+    #carta hgroup h2 {
+      font-size: 1em;
+      color: #c49a6c;
+      margin-top: -20px;
+    }
+
+    #carta p {
+      color: #5c4b3c;
+      font-size: 0.9em;
+      line-height: 1.45em;
+      margin: 15px 0;
+    }
+
+    #carta p:first-letter {
+      color: #c49a6c;
+      font-size: 2em;
+      float: left;
+      line-height: 1.2em;
+      padding: 5px 10px 0 0;
+    }
+
+    #hearts {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .heart {
+      position: absolute;
+      color: #f4a6a6;
+      font-size: 20px;
+      animation: float 6s ease-in-out infinite;
+      opacity: 0.7;
+    }
+    
+    .heart:nth-child(1) { left: 10%; animation-delay: 0s; font-size: 16px; }
+    .heart:nth-child(2) { left: 20%; animation-delay: 1s; font-size: 24px; }
+    .heart:nth-child(3) { left: 30%; animation-delay: 2s; font-size: 18px; }
+    .heart:nth-child(4) { left: 40%; animation-delay: 3s; font-size: 22px; }
+    .heart:nth-child(5) { left: 50%; animation-delay: 4s; font-size: 20px; }
+    .heart:nth-child(6) { left: 60%; animation-delay: 0.5s; font-size: 16px; }
+    .heart:nth-child(7) { left: 70%; animation-delay: 1.5s; font-size: 26px; }
+    .heart:nth-child(8) { left: 80%; animation-delay: 2.5s; font-size: 18px; }
+    .heart:nth-child(9) { left: 90%; animation-delay: 3.5s; font-size: 24px; }
+    .heart:nth-child(10) { left: 15%; animation-delay: 4.5s; font-size: 20px; }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.7;
+      }
+      90% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="perspectiva">
+    <div id="contenedor">
+      <div class="cara frontal">
+        <div id="hearts"></div>
+        <h1>For my bebi<br><span>Scroll ↓</span></h1>
+      </div>
+      <div class="cara trasera">
+        <div id="abrir"></div>
+        <div id="partes"></div>
+        <div id="carta">
+          <div class="carta-content">
+            <hgroup>
+              <h1>Scroll</h1>
+              <h2>↓</h2>
+            </hgroup>
+            <p>
+              To my bebii ❤️ Hi, bebi. Alam mo naman, matagal-tagal ko na rin itong hinihintay, kaya I hope matuloy tayo. Pero don’t worry ha kung hindi mo talaga kaya, hindi naman ako magtatampo. Malulungkot lang ako, hahaha. Nasabi ko na rin sayo na hindi ko na talaga alam kung paano kita idadate. To be honest, bebi, hindi ko na rin alam kung ano ba talaga ang perfect first date. Pinagdadasal ko na lang na sana ma-enjoy mo kung sakali, kasi ako, basta ikaw ang kasama ko, sobrang saya ko na. Sana mapapayag kita, kasi magiging masaya talaga ako. 
+              <br><br>
+              <strong>When:</strong> September 6 or 7 kung anong prefer mo <br>
+              <strong>Where?</strong> Eto, nag-ready ako ng mga pwede nating puntahan sa Tagaytay: <br>
+              • San Antonio de Padua Church – puntahan muna natin to bago tayo mag lunch <br>
+              • Bon Appétit – dito tayo mag lunch <br>
+              • Tagaytay Crosswind – eto yung sinasabi ko na Switzerland inspired architecture <br>
+              • Cinema – Hmm pag trip mo parin siguro mag sine non mag sisine tayo hahaha <br>
+              • Hannah Studios – Kasi gusto ko magka-picture tayo sa 1st date natin <br>
+              • Casa Alegria – Di ka naman nagkakape pero kahit di naman coffee bilhin natin <br><br>
+              <strong>What to wear:</strong> mag white ka nalang siguro para same tayo bwhahahaaha 
+              <br><br>
+              Hindi naman natin kailangan puntahan lahat yan, yung kaya lang, basta hindi ka mapagod okay? Nag isip talaga ako ng sobra sobra dito para naman maging unforgettable itong first date natin. Sana pumayag ka, love youuuu. ❤
+            </p>
+          </div>
+        </div>
+      </div>
+    </div><!-- fin contenedor -->
+  </div>
+  <div id="hearts">
+    <div class="heart">♥</div>
+    <div class="heart">♥</div>
+    <div class="heart">♥</div>
+    <div class="heart">♥</div>
+    <div class="heart">♥</div>
+    <div class="heart">♥</div>
+    <div class="heart">♥</div>
+    <div class="heart">♥</div>
+    <div class="heart">♥</div>
+    <div class="heart">♥</div>
+  </div>
+  <div id="wrapper"></div>
+  <!-- hidden audio -->
+  <audio id="bgMusic" loop>
+    <source src="./the way i love u.mp3" type="audio/mp3">
+  </audio>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(window).scroll(function () {
+    var scr = $(window).scrollTop(),
+        C = $('#contenedor'),
+        A = $('#abrir'),
+        E = $('#carta'),
+        F = $('#carta hgroup h2'),
+        P = $('#perspectiva');
+
+    if (scr >= 100) {
+      C.css({'transition':'all 1s','transform':'rotateY(180deg)'});
+      A.css({'transition':'all 1s .5s','transform':'rotateX(180deg)','z-index':'0'});
+    } else if (scr <= 100) {
+      C.css({'transition':'all 1s .5s','transform':'rotateY(0deg)'});
+      A.css({'transition':'all 1s','transform':'rotateX(0deg)','z-index':'10'});
+    }
+
+    if (scr >= 500) {
+      E.css({'transition':'all .5s 1s','top':'-550px','height':'500px'});
+      P.css({'transition':'all 1s','transform':'translateY(450px)'});
+      F.css({'transition':'all 1s','transform':'rotateZ(180deg)'});
+
+      // spawn white hearts when the letter comes out
+      for (let i = 0; i < 15; i++) {
+        setTimeout(createHeart, i * 200);
+      }
+
+    } else if (scr <= 500) {
+      E.css({'transition':'all .5s','top':'3px','height':'200px'});
+      P.css({'transform':'translateY(0px)'});
+      F.css({'transform':'rotateZ(0deg)'});
+    }
+  });
+
+  // play music on first scroll
+  let musicStarted = false;
+function startMusic() {
+  if (!musicStarted) {
+    document.getElementById("bgMusic").play();
+    musicStarted = true;
+  }
+}
+
+// play on scroll OR click
+window.addEventListener("scroll", startMusic);
+window.addEventListener("click", startMusic);
+window.addEventListener("touchstart", startMusic);
+
+
+  // JavaScript for floating hearts
+function createFloatingHearts() {
+  // Create hearts container if it doesn't exist
+  let heartsContainer = document.getElementById('hearts');
+  if (!heartsContainer) {
+    heartsContainer = document.createElement('div');
+    heartsContainer.id = 'hearts';
+    heartsContainer.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    `;
+    document.body.appendChild(heartsContainer);
+  }
+
+  // Create a single heart
+  function createHeart() {
+    const heart = document.createElement('div');
+    heart.innerHTML = '♥';
+    heart.style.cssText = `
+      position: absolute;
+      color: #f4a6a6;
+      font-size: ${Math.random() * 10 + 16}px;
+      opacity: 0.7;
+      left: ${Math.random() * 100}%;
+      animation: floatUp ${Math.random() * 3 + 4}s ease-in-out forwards;
+    `;
+    
+    heartsContainer.appendChild(heart);
+    
+    // Remove heart after animation completes
+    setTimeout(() => {
+      if (heart.parentNode) {
+        heart.parentNode.removeChild(heart);
+      }
+    }, 7000);
+  }
+
+  // Create hearts continuously
+  setInterval(createHeart, 800);
+}
+
+// Add CSS animation keyframes
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes floatUp {
+    0% {
+      transform: translateY(100vh) rotate(0deg);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.7;
+    }
+    90% {
+      opacity: 0.7;
+    }
+    100% {
+      transform: translateY(-100px) rotate(360deg);
+      opacity: 0;
+    }
+  }
+`;
+document.head.appendChild(style);
+
+// Start the hearts when page loads
+document.addEventListener('DOMContentLoaded', createFloatingHearts);
+</script>
+</body>
+</html>

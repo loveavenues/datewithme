@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html,body {
+            width: 100%;
+            height: 100%;
+            display: table;
+            background: #faf3f3 linear-gradient(#ededdf, #f5d9e8);
+        }
+        body {
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+            padding-bottom: 17vh;
+        }
+        #bar {
+            border: 1px solid #a3a39a;
+          border-right-color: #fff;
+          border-bottom-color: #fff;
+          border-radius: 0 2px 2px 0;
+            background: #E4E4E0;
+            margin: 0 auto 8px;
+            padding: 1px;
+            width: 296px;
+        }
+        #bar #progress {
+            background: #804;
+            height: 13px;
+            visibility: hidden;
+            width: 1px;
+        }
+        button {
+          position: relative;
+            width: 103px;
+          background: #E4E4E0;
+          border: 1px solid #000;
+          border-top: none;
+          border-left-color: #fff;
+          padding: 2px 0 1px;
+        }
+        button:before {
+          position: absolute;
+          content: '';
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          border: 1px solid #A3A39A;
+          border-top-color: #fff;
+          border-left: none;
+          border-radius: 0 2px 0 0;
+        }
+        button:active {
+          border: 1px solid #000;
+          border-bottom: none;
+          border-right-color: #fff;
+          padding: 1px 0 2px;
+        }
+        button:active:before {
+          border: 1px solid #A3A39A;
+          border-bottom-color: #fff;
+          border-right: none;
+          border-radius: 0 0 0 2px;
+        }
+        button:focus {
+          outline: 1px solid #000;
+        }
+        button::-moz-focus-inner {
+          border: 0;
+          outline: 0;
+        }
+        .wndFrame {
+          position: relative;
+            width: 372px;
+            border-width: 1px;
+          border-style: solid;
+          border-color: #A3A39A #000 #000 #A3A39A;
+            margin: 0 auto;
+          padding: 1px;
+            text-align: center;
+            background: #E4E4E0;
+        }
+        .wndFrame:before {
+          pointer-events: none;
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          border: 1px outset #E4E4E0;
+        }
+        .wnd {
+            width: 340px;
+            margin: 0 auto;
+            padding: 24px 16px 16px;
+            background: #E4E4E0;
+        }
+        .wndCaption {
+            margin: 1px 2px 0 1px;
+          padding: 0;
+            height: 18px;
+          font: bold 12.5px Helvetica,Arial,"Helvetica Neue",sans-serif;
+            background: #302 linear-gradient(90deg, #302, #C69);
+          
+            color: #fff;
+        }
+        .wndCaption p {
+          line-height: 18px;
+          margin: 0;
+        }
+        .wndText {
+            text-align: left;
+            margin: 0 0 24px;
+            font: normal 80% Tahoma,sans-serif;
+        }
+        
+        #aboutWnd {
+            width: 482px;
+        }
+        #aboutWnd .wnd {
+            width: 450px;
+            padding: 8px 8px 16px;
+        }
+        .closeAbout {
+          position: absolute;
+          clip: rect(0,38px,18px,20px);
+          top: 2px;
+          right: 3px;
+          cursor: pointer;
+          border: 0;
+        }
+        .aboutCaption {
+          background: url('//jaboja.pl/limgen/win.gif') 2px 3px no-repeat, #008 linear-gradient(90deg, #00007b, #0884ce);
+          text-align: left;
+          padding-left: 21px;
+        }
+    </style>
+</head>
+<body>
+    <div class="wndFrame" id="mainWnd"><h3 class="wndCaption">
+        <img src="//cdn1.iconfinder.com/data/icons/realistiK-new/16x16/actions/love.png" alt="♥" hspace="2" vspace="1" align="left">
+      <p>Love</p>
+    </h3><div class="wnd">
+        <div id="bar"><div id="progress"></div></div>
+        <button onclick="return fallIn()" id="btn">Fall in love</button>
+    </div></div>
+    </div></div>
+        <script>
+            var btn = document.getElementById('btn');
+            var progress = document.getElementById('progress');
+            var w = 1, i;
+            
+            function fallIn() {
+              progress.style.visibility = 'visible';
+              
+              btn.innerHTML = "Cancel";
+              btn.onclick = function() {
+                clearInterval(i);
+                btn.innerHTML = "View my invitation for u"; 
+                btn.onclick = viewInvite;
+              };
+              
+              i = setInterval(function(){
+                w += 5;
+                if(w > 296) {
+                  clearInterval(i);
+                  btn.innerHTML = "View my invitation for u"; 
+                  btn.onclick = viewInvite;
+                } else {
+                  progress.style.width = w + 'px';
+                }
+              }, 100);
+              
+              return false;
+            }
+            
+            function viewInvite() {
+              // redirect to letter.html
+              window.location.href = "letter.html";
+            }
+            
+            function closeWnd() {
+              var wnd = document.getElementById('mainWnd');
+              wnd.style.display = 'none';
+              setTimeout(function(){
+                wnd.style.display = '';
+              }, 3000);
+              return false;
+            }
+            
+            function about(self) {
+              document.getElementById('mainWnd').style.display = 'none';
+              document.getElementById('aboutWnd').style.display = '';
+              return false;
+            }
+            
+            function closeAbout() {
+              document.getElementById('aboutWnd').style.display = 'none';
+              document.getElementById('mainWnd').style.display = 'block';
+            }
+            </script>
+            
+
+</body>
+</html>
